@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
-// const Mongodb=require("../mongodb/mongo")
+const saveToDB=require('../config/userData')
 
 router.get("/", (req, res) => {
-   
         res.redirect("/home");
-   
 });
 
 router.get('/home',(req,res)=>{
@@ -49,11 +47,13 @@ router.get("/signup", (req, res) => {
     res.render("signup");
 });
 router.post("/signup", (req, res) => {
-    console.log(req.body);
-
+    // console.log(req.body);
+    saveToDB(req.body.fname,req.body.Email,req.body.password)
+    
+    // console.log(data)
     req.session.name = req.body.fname;
     req.session.email = req.body.Email;
-    req.session.password = req.body.password;
+    req.session.password =  req.body.password;
     req.session.logged = true;
     res.redirect("/home");
 });

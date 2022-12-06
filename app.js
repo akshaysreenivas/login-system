@@ -4,7 +4,19 @@ const port=3000;
 const session=require('express-session')
 const userRouter=require('./routes/users');
 const adminRouter=require('./routes/admin');
-const MongoClient=require('mongodb').MongoClient
+const Userlist=require('./connection/mongoose')
+
+///////
+
+// Userlist.find({ email: "asd@asd" },{name:1})
+//     .then(data => {
+//         console.log("Database Courses:")
+//         console.log(data);
+//     })
+
+
+
+
 // view engine 
 app.set('view engine', 'hbs');
 
