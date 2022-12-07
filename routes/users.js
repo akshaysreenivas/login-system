@@ -1,67 +1,95 @@
 const express = require("express");
 const router = express.Router();
-const saveToDB=require('../config/userData')
+const Userhelper = require('../config/user-helper/userData')
+const mobiles =require('../config/products.js/products')
 
 router.get("/", (req, res) => {
-        res.redirect("/home");
+    res.redirect("/home");
 });
 
-router.get('/home',(req,res)=>{
+router.get('/home', (req, res) => {
     if (req.session.logged) {
-        res.render("home");
+        const userName = req.session.users.name
+      
+        
+        res.render("home", { userName,mobiles });
     } else {
         res.redirect("/login");
-        
     }
 })
+
+// login get
+
 router.get("/login", (req, res) => {
     if (req.session.logged) {
         res.redirect("/home");
     } else {
-        const loginfail=req.session.loginfail
-        res.render("login",{loginfail});
-        req.session.loginfail=false
+        const loginfail = req.session.loginFailmsg
+        res.render("login", { loginfail });
+        req.session.loginFailmsg = " "
     }
 });
+
+// login post 
 
 router.post("/login", (req, res) => {
-    
-    const loginfail=req.session.logged
-    if (
-        req.body.Email === req.session.email &&
-        req.body.Password === req.session.password
-    ) {
-        req.session.logged = true;
-        res.redirect("/");
-    } else {
-        
-        req.session.loginfail=true;
-      
-       res.redirect("/login");
-    }
+    Userhelper.doLogin(req.body).then((response) => {
+        console.log(response.status)
+        if (response.status) {
+            console.log("login ")
+            req.session.logged = true;
+            req.session.users = response.user;
+            res.redirect("/");
+        } else {
+            console.log("login fail")
+            if (response.found) {
+
+                req.session.loginFailmsg = "Invalid Password";
+                console.log(req.session.loginFailmsg)
+            } else {
+
+                req.session.loginFailmsg = "No account found with this EmailId ";
+                console.log(req.session.loginFailmsg)
+            }
+            res.redirect("/login");
+        }
+    })
+
+
 });
+
+
+// signup get  
+
 router.get("/signup", (req, res) => {
-    if(req.session.logged){
+    if (req.session.logged) {
         res.redirect("/home");
-    }else
-    res.render("signup");
+    } else
+        res.render("signup");
 });
+
+// signup post
+
 router.post("/signup", (req, res) => {
-    // console.log(req.body);
-    saveToDB(req.body.fname,req.body.Email,req.body.password)
-    
-    // console.log(data)
-    req.session.name = req.body.fname;
-    req.session.email = req.body.Email;
-    req.session.password =  req.body.password;
-    req.session.logged = true;
-    res.redirect("/home");
+    Userhelper.doSignup(req.body).then((response) => {
+        if (response.added) {
+            req.session.logged = true;
+            req.session.users = response.data;
+            res.redirect("/home");
+        } else {
+            req.session.loginFailmsg = "This email id is alredy linked with an account"
+            res.redirect('/login')
+        }
+    })
+
 });
 
-router.get("/home/usersdata",(req,res)=>{
-   res.render('page');
-});
+// logout   
 
+router.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect('/login')
+})
 
 
 

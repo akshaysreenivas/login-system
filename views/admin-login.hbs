@@ -1,0 +1,31 @@
+<section class="background-radial-gradient d-flex justify-content-center vh-100 vw-100 align-items-center p-2" style="background-color: #fad7bb;">
+   
+    <div class="login-div p-5 rounded" style="background-color: #88a1d6;">
+
+        <form action="/admin/admin-login" method="post" >
+            <div class="container mb-3">
+        <img src="https://www.myg.in/images/logos/1/myg-logo.png" width="50px" alt="myg-logo" />
+
+            <h2 class="p-5">Login as admin</h2>
+            </div>
+            {{#if loginfail}}
+            <div class="text-danger"><b>Invalid</b> Email ID or Password.</div>
+            {{/if}}
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+                <input type="email" id="form2Example1" name="UserEmail" class="form-control" />
+                <label class="form-label" for="form2Example1">Email address</label>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+                <input type="password" id="form2Example2" name="userPassword" class="form-control" />
+                <label class="form-label" for="form2Example2">Password</label>
+            </div>
+               
+            <button type="submit" class="btn btn-success btn-block m-2 px-5">login</button>
+            </div>
+        </form>
+    </div>
+    
+</section>
