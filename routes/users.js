@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Userhelper = require('../config/user-helper/userData')
-const mobiles =require('../config/products.js/products')
+const User = require('../config/user-helper/userData')
+const mobiles =require('../config/products.js/products');
+
 
 router.get("/", (req, res) => {
     res.redirect("/home");
@@ -33,7 +34,8 @@ router.get("/login", (req, res) => {
 // login post 
 
 router.post("/login", (req, res) => {
-    Userhelper.doLogin(req.body).then((response) => {
+    
+   User.doLogin(req.body).then((response) => {
         console.log(response.status)
         if (response.status) {
             console.log("login ")
@@ -43,7 +45,6 @@ router.post("/login", (req, res) => {
         } else {
             console.log("login fail")
             if (response.found) {
-
                 req.session.loginFailmsg = "Invalid Password";
                 console.log(req.session.loginFailmsg)
             } else {
@@ -64,19 +65,30 @@ router.post("/login", (req, res) => {
 router.get("/signup", (req, res) => {
     if (req.session.logged) {
         res.redirect("/home");
-    } else
-        res.render("signup");
+    } else{
+        const signfail = req.session.signFailmsg
+        res.render("signup", { signfail }); 
+        req.session.signFailmsg = " "
+    }
+    
+
+
 });
 
 // signup post
 
 router.post("/signup", (req, res) => {
-    Userhelper.doSignup(req.body).then((response) => {
+  
+    User.doSignup(req.body).then((response) => {
         if (response.added) {
             req.session.logged = true;
             req.session.users = response.data;
             res.redirect("/home");
-        } else {
+        } else if(!response.added){
+            req.session.signFailmsg = "connection error"
+            res.redirect('/signup')
+
+        }else{
             req.session.loginFailmsg = "This email id is alredy linked with an account"
             res.redirect('/login')
         }
