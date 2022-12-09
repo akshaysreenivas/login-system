@@ -79,7 +79,7 @@ router.get("/signup", (req, res) => {
 
 router.post("/signup", (req, res) => {
   
-    User.doSignup(req.body).then((response) => {
+    User.createAccount(req.body).then((response) => {
         if (response.added) {
             req.session.logged = true;
             req.session.users = response.data;

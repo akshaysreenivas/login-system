@@ -6,20 +6,20 @@
             <div class="container mb-3">
         <img src="https://www.myg.in/images/logos/1/myg-logo.png" width="50px" alt="myg-logo" />
 
-            <h2 class="p-5">Login as admin</h2>
+            <h2 class="p-3">Login as admin</h2>
             </div>
             {{#if loginfail}}
-            <div class="text-danger"><b>Invalid</b> Email ID or Password.</div>
+            <div class="text-danger py-3"><b>{{loginfail}}</b></div>
             {{/if}}
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input type="email" id="form2Example1" name="UserEmail" class="form-control" />
+                <input type="email" id="form2Example1" name="Email" class="form-control" required/>
                 <label class="form-label" for="form2Example1">Email address</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input type="password" id="form2Example2" name="userPassword" class="form-control" />
+                <input type="password" id="form2Example2" name="Password" class="form-control" required />
                 <label class="form-label" for="form2Example2">Password</label>
             </div>
                

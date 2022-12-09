@@ -1,52 +1,136 @@
-const { response } = require('express');
+
 const express=require('express');
 const router=express.Router();
-const db= require('../connection/mongoose')
-const adminhelper=require('../config/admin-helper/admin-data')
-const p = '1234'
-const userList=require('../config/admin-helper/admin-data')
-const aps='$2a$10$gm6v7Df9hW81Apfj6wLP5ufeRY5Iqf4AeQk/eM5u8PSjAxz27IUJe'
+const adminlog=require('../config/admin-helper/admin-data')
+const User = require('../config/user-helper/userData')
 
-// router.get('/',(req,res)=>{
-  
-//       res.render('admin-login')
+
+
+
+
+
+// homepage .....
+
+router.get('/',(req,res)=>{
+  if(req.session.adminlogged){
     
-// });
 
-router.get('/', function(req, res, next) {
-  db.dbConnect()
-  userList.findOne({name:"ajay"},(err, docs) => {
-      if (!err) {
-        console.log(docs)
-          res.render("", {
-              data: docs
-              
-          });
-          db.dbClose()
-      } else {
-          console.log('Failed to retrieve the Course List: ' + err);
-      }
-  });
-
+    res.render('adminpanel',{admin:req.session.admin})
+  }else
+    res.redirect('/admin/login')
+    
 });
 
-
-
-
+// login.....
 
 router.get('/login',(req,res)=>{
-    res.render('admin-login')
+  if(req.session.adminlogged){
+    res.redirect('/admin')
+  }else{
+const loginfail=req.session.loginfailmsg
+console.log("login fail>>",loginfail)
+    res.render('admin-login',{loginfail})
+    req.session.loginfailmsg=""
+  }
   });
 
 
 
 router.post('/admin-login',(req,res)=>{
   console.log('admin login')
-  res.redirect('/admin')
+  adminlog.adminlogin(req.body).then((response)=>{
+    if (response.status){
+      req.session.adminlogged=true
+      req.session.admin=response.docs
+      console.log('response.doc',response.docs.name)
+      res.redirect('/admin')
+
+    }else{
+      if(response.check){
+        req.session.loginfailmsg="Invalid Password"
+      }else{
+        req.session.loginfailmsg="No admin account with this Email ID"
+      }
+      res.redirect('/admin/login')
+
+    }
+  });
+
 })
 
 
-router.post('/logout',(req,res)=>{
+// ........user management......
+
+
+// adduser....
+
+router.get('/adduser',(req,res)=>{
+  const usermanagemsg=req.session.usermanagemsg
+  const user=req.session.user
+  res.render('adduser',{usermanagemsg,admin:req.session.admin})
+  req.session.usermanagemsg=""
+})
+
+router.post('/adduser',(req,res)=>{
+  User.createAccount(req.body).then((response) => {
+    if (response.added) {
+        req.session.logged = true;
+        req.session.user = response.data;
+        req.session.usermanagemsg="Successfully added user ",
+        res.redirect("/admin/adduser");
+    } else if(!response.added){
+        req.session.usermanagemsg = "cannot add user"
+        res.redirect('/signup')
+
+    }else{
+        req.session.loginFailmsg = "This email id is alredy linked with an account"
+        res.redirect('/login')
+    }
+})
+})
+
+
+// edit user ..
+
+router.get('/edituser',(req,res)=>{
+  res.render('edit-user',{admin:req.session.admin})
+})
+
+// show user ....
+
+router.get('/showusers',(req,res)=>{
+  User.getData().then((response)=>{
+if(response){
+ const usersData=response.data
+  // console.log("response",usersData)
+      res.render('showuser',{usersData,admin:req.session.admin})
+}
+else{
+
+  res.send("cannot get Users Data")
+}
+  })
+})
+
+// delete user.... 
+
+router.post('/deleteuser',(req,res)=>{
+  console.log("id-",req.body)
+  User.deleteData(req.body).then((response)=>{
+    if(response.status) res.redirect("/admin/showuser")
+  })
+ 
+})
+
+
+
+
+
+// logout .....
+
+router.get('/adminlogout',(req,res)=>{
+  console.log('admin logout')
+
   req.session.destroy();
   res.redirect('/admin/login')
 })

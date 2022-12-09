@@ -24,7 +24,6 @@ module.exports ={
         });
        
       }
-
       else {
         console.log("no user found")
         resolve({ status: false, found: false })
@@ -37,7 +36,7 @@ module.exports ={
 
 
 
-doSignup :  async (signUpdata) => {
+createAccount :  async (signUpdata) => {
   console.log("signUpdata",signUpdata)
   
   return new Promise(async (resolve, reject) => {
@@ -45,19 +44,15 @@ doSignup :  async (signUpdata) => {
 
       const newUserlist = new Userlist({
         name: signUpdata.fname,
-        email: signUpdata.Email,
+        email: signUpdata.email,
         password: signUpdata.password
 
       })
       await newUserlist.save((err, data) => {
         if (data) {
           console.log("data>.",data)
-
           console.log(" successfully added user ")
-         
-
-          resolve({ added: true, data },)
-         
+          resolve({ added: true, data },) 
         }
         else {
           console.log("can't add user")
@@ -71,10 +66,43 @@ doSignup :  async (signUpdata) => {
 
   })
  
+},
+getData: ()=>{
+  try{
+    return new Promise ((resolve,reject)=>{
+      Userlist.find({}).lean().then((data)=>{
+        resolve({data})
+        // console.log("user data>>>> ",data)
+        
+      })
+  })
 }
+catch (err){
+  console.log(err);
+
+}
+},
+ deleteData:(userData)=>{
+  return new Promise ((resolve,reject)=>{
+    Userlist.deleteOne({_id:userData._id}).then((data)=>{
+      if(data){
+        console.log("success deletion",data);
+        resolve({status:true})
+      }
+    })
+  })
+ } 
+  
+
+  
 
 
 }
+
+
+
+
+
 
 
 

@@ -4,10 +4,11 @@ const port=3000;
 const session=require('express-session')
 const userRouter=require('./routes/users');
 const adminRouter=require('./routes/admin');
-const Userlist=require('./connection/mongoose')
+const hbs = require('express-handlebars')
 
 // view engine 
 app.set('view engine', 'hbs');
+app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
 
 
 app.use(express.urlencoded({ extended: false }));

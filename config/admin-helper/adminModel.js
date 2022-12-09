@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
  
-// create an schema
-const userSchema = new mongoose.Schema({
+// creating schema
+const adminSchema = new mongoose.Schema({
             name: String,
             email:String,
             password:String
@@ -9,4 +9,4 @@ const userSchema = new mongoose.Schema({
  
 
  
-module.exports = mongoose.model("adminlists", userSchema);
+module.exports = mongoose.model("adminlist", adminSchema);

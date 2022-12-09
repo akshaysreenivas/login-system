@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-lg bg-dark fixed-top">
+  
+  <div class="container">
+    <a class="navbar-brand" href="#"> <img src="https://www.myg.in/images/logos/1/myg-logo.png" class="img-fluid mx-5" width="50" alt="myg-logo"
+      loading="lazy" /></a>
+        <h2 class=" text-white px-5 ">Admin Panel</h2>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active text-white" aria-current="page" href="#"><b>Home</b></a>
+        </li>
+       </ul>
+    
+      <span class="nav-item text-white">
+      <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active px-5" href="#" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img
+              src="https://www.iconpacks.net/icons/1/free-user-group-icon-296-thumb.png "
+              class="rounded-circle" height="22" alt="" loading="lazy" />
+            Users
+
+          </a>
+
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person mx-3"></i> Account Details</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-pencil mx-3"></i> Edit profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" method="get" href="/admin/admin-logout"><i class="bi bi-box-arrow-right mx-3"></i>Logout</a>
+             </li>
+          </ul>
+          </div>
+
+      </span>
+
+        <span class="nav-item text-white">
+       <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active px-5" href="#" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img
+              src="https://png.pngtree.com/png-clipart/20190629/original/pngtree-vector-edit-profile-icon-png-image_4102545.jpg"
+              class="rounded-circle" height="22" alt="" loading="lazy" />
+            {{admin.name}}
+            
+           
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person mx-3"></i> Account Details</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-pencil mx-3"></i> Edit profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" method="get" href="/admin/adminlogout"><i class="bi bi-box-arrow-right mx-3"></i>Logout</a> </li>
+          </ul>
+       </div>
+      </span>
+
+    </div>
+  </div>
+</nav>

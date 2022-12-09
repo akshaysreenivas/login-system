@@ -1,0 +1,44 @@
+{{>admin-header}}
+
+
+<section class=" container-fluid py-5 mt-5">
+    <div class="container p-5  border-primary">
+        <h2>Users List</h2>
+        <table class="table table-hover">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email Id</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each usersData}}
+
+                <tr>
+                    <td>{{_id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{email}}</td>
+                    <form action="/admin/edituser" method="post">
+                        <input type="text" value="{{_id}}" name="_id" class="d-none">
+
+                        <td><button type="submit" class="btn btn-warning"><i class="bi bi-pencil-square"></i> </button>
+                        </td>
+                    </form>
+                    <form action="/admin/deleteuser" method="post">
+                        <input type="text" value="{{_id}}" name="_id" class="d-none">
+
+                    <td><button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> </button></td>
+                        </td>
+                    </form>
+                </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+    </div>
+
+</section>
